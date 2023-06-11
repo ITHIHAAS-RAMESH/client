@@ -1,0 +1,96 @@
+import React from 'react'
+import axios from 'axios'
+import './AddGame.css'
+import './EditGame.css'
+const EditGame = () => {
+
+  const [allGames , setAllGames] = React.useState([])
+  const [game , setGame] = React.useState({
+    name:'',
+    image_url:'',
+    completed:true
+  })
+  React.useEffect(()=>{
+    axios.get('https://games-library-wbdz.onrender.com/mygames/')
+    .then((res)=>{
+      console.log(res)
+      setAllGames(res.data)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  },[])
+
+  
+
+  
+
+  const handleChange = (event) => {
+    setGame({
+      ...game,[event.target.name]:event.target.value
+    })
+    console.log(game)
+  }
+  
+  const handleEdit = (event) =>{
+    console.log(event.target.value)
+      axios.get(`https://games-library-wbdz.onrender.com/mygames/${event.target.value}`)
+      .then((res)=>{
+        console.log(res.data)
+        res.data.completed = res.data.completed.toString()
+        setGame({
+          name:res.data.name,
+          image_url:res.data.image_url,
+          completed:res.data.completed
+        })
+      }).catch((err)=>{
+        console.log(err)
+      })
+  }
+  const handlePost = (event) =>{
+    event.preventDefault();
+    console.log(game)
+    axios.patch(`https://games-library-wbdz.onrender.com/mygames/${game.name}`,game)
+    .then((res)=>{
+      console.log(res)
+      alert('Game Edited')
+    }).catch((err)=>{
+      console.log(err)
+      alert('Failed to Edit game')
+    })
+  }
+
+
+  return (
+    <>
+    <div className='formcontainer'>
+        <form className='forms'>
+            <label>Name:<br></br><select onChange={handleEdit} id="name" name="name">
+                <option value="">Select a game</option>
+                    {allGames.map((data)=>{return <option key={data._id} value={data.name}>{data.name}</option>})}
+                </select></label>
+            <label >Image URL:<br></br> 
+            <input onChange={handleChange} className='input' type="text" name="image_url" id="image_url" value={game.image_url}/>
+            <br/></label>
+            <div className='completed'>
+            <label htmlFor="completed">Completed</label>
+            <input 
+            onChange={handleChange} 
+            type="radio" 
+            name="completed" 
+            value={true} 
+            checked={game.completed == 'true'}
+            id="true"/>
+            <label htmlFor="true">True</label>
+            <input onChange={handleChange} type="radio" name="completed" value={false} id="false" checked={game.completed == 'false'}/>
+            <label htmlFor="false">False</label></div>
+            <button 
+            className='submit'
+            type="submit" 
+            onClick={handlePost}>Edit Game</button>
+        </form>
+        </div>
+    </>
+  )
+}
+
+export default EditGame

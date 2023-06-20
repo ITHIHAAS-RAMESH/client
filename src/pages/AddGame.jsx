@@ -2,6 +2,10 @@ import React from 'react'
 import axios from 'axios'
 import './AddGame.css'
 const AddGame = () => {
+  const token = {token : sessionStorage.getItem('token')}
+    if(!token.token){
+      window.location.href = '/'
+    }
   const [game , setGame] = React.useState({
     name:'',
     image_url:'',
@@ -16,7 +20,7 @@ const AddGame = () => {
   
   const handlePost = (event) =>{
     event.preventDefault();
-    axios.post('https://games-library-wbdz.onrender.com/mygames/',game)
+    axios.post('https://games-library-wbdz.onrender.com/mygames/',{...game,token:token.token})
     .then((res)=>{
       console.log(res)
       alert('Game Added')

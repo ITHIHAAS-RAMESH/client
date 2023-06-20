@@ -3,7 +3,10 @@ import axios from 'axios'
 import './AddGame.css'
 import './EditGame.css'
 const EditGame = () => {
-
+  const token = sessionStorage.getItem('token')
+  if(!token){
+    window.location.href = '/'
+  }
   const [allGames , setAllGames] = React.useState([])
   const [game , setGame] = React.useState({
     name:'',
@@ -11,7 +14,7 @@ const EditGame = () => {
     completed:true
   })
   React.useEffect(()=>{
-    axios.get('https://games-library-wbdz.onrender.com/mygames/')
+    axios.post('https://games-library-wbdz.onrender.com/mygames/all',{token})
     .then((res)=>{
       console.log(res)
       setAllGames(res.data)
@@ -19,10 +22,6 @@ const EditGame = () => {
       console.log(err)
     })
   },[])
-
-  
-
-  
 
   const handleChange = (event) => {
     setGame({
@@ -32,8 +31,15 @@ const EditGame = () => {
   }
   
   const handleEdit = (event) =>{
-    console.log(event.target.value)
-      axios.get(`https://games-library-wbdz.onrender.com/mygames/${event.target.value}`)
+    if(event.target.value == ''){
+      setGame({
+        name:'',
+        image_url:'',
+        completed:true
+      })
+      return
+    }
+      axios.post(`https://games-library-wbdz.onrender.com/mygames/${event.target.value}`,{token})
       .then((res)=>{
         console.log(res.data)
         res.data.completed = res.data.completed.toString()
@@ -49,7 +55,7 @@ const EditGame = () => {
   const handlePost = (event) =>{
     event.preventDefault();
     console.log(game)
-    axios.patch(`https://games-library-wbdz.onrender.com/mygames/${game.name}`,game)
+    axios.patch(`https://games-library-wbdz.onrender.com/mygames/${game.name}`,{...game,token})
     .then((res)=>{
       console.log(res)
       alert('Game Edited')

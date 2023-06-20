@@ -1,5 +1,5 @@
 .card-container{
-    height: 400px;
+    min-height: 400px;
     width: 300px;
     background-color: #ecebe46e;
     border-radius: 10px;
@@ -9,6 +9,7 @@
     flex-direction: column;
     gap: 50px;
     font-size: 30px;
+    position: relative;
 }
 
 .card-container img{
@@ -22,9 +23,27 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 .completed img{
     width: 30px;
     height: 30px;
+}
+
+.game-name{
+    
+    text-align: center;
+}
+.delete{
+    position: absolute;
+    margin: 10px 0px;
+    left: 5px;
+    top: 150px;
+    background-color: red;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
 }

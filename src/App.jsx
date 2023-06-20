@@ -4,19 +4,20 @@ import Nav from './components/Nav'
 import GameCardContainer from './components/GameCardContainer'
 import AddGame from './pages/AddGame'
 import EditGame from './pages/EditGame'
-
+import LoginForm from './pages/LoginForm'
+import Signup from './pages/Signup'
 const App = () => {
   return (
     <div>
-      <Nav/>
-      <BrowserRouter>
+      
         <Routes>
-          <Route path='/' element={<GameCardContainer/>}/>
-          <Route path='/add-game' element={<AddGame/>}/>
-          <Route path='/edit-game' element={<EditGame/>}/>
+          <Route path='/home' element={<><Nav/><GameCardContainer/></>}/>
+          <Route path='/add-game' element={<><Nav/><AddGame/></> }/> 
+          <Route path='/edit-game' element={<><Nav/><EditGame/></>}/>
+          <Route path='/signup' element={<Signup/>}/>
+          <Route path='*' element={<LoginForm/>}/>
         </Routes>
         
-      </BrowserRouter>
       
     </div>
   )

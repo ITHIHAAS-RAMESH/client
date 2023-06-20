@@ -5,17 +5,23 @@ import axios from 'axios'
 
 
 const GameCardContainer = () => {
+    const token = {token : sessionStorage.getItem('token')}
+    console.log(token)
+    if(!token.token){
+      window.location.href = '/'
+    }
     const [filter,setFilter] = React.useState('all')
     const [games, setGames] = React.useState([])
+    
     React.useEffect(() => {
-  axios.get(`https://games-library-wbdz.onrender.com/mygames/${filter}`)
+  axios.post(`https://games-library-wbdz.onrender.com/mygames/${filter}`,token)
   .then(async function (data){
     console.log(data.data)
     await setGames(data.data)
     
   }).catch((err) => {console.log(err)})},[filter])
 
-  console.log(games)
+  
 
 
 
@@ -27,7 +33,7 @@ const GameCardContainer = () => {
         <div className={`${filter==='playing' && "active"}`} onClick={() => setFilter('playing')}>Playing</div>
       </div>
     <div className='gamecardcontainer'>
-      
+        {games.length === 0 && <div className='no-games'>No Games</div>}
         {games.map((game) => (<GameCard key={game._id} name={game.name} completed={game.completed} image_url={game.image_url}/>))}
         
     </div>
